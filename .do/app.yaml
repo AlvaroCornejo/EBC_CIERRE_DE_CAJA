@@ -1,0 +1,36 @@
+name: cierre-caja
+region: nyc
+services:
+  - name: backend
+    github:
+      repo: AlvaroCornejo/EBC_CIERRE_DE_CAJA
+      branch: main
+      deploy_on_push: true
+    source_dir: backend
+    build_command: npm install
+    run_command: npm start
+    http_port: 4000
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    envs:
+      - key: MONGODB_URI
+        type: SECRET
+        value: "REEMPLAZAR_EN_DO"
+      - key: JWT_SECRET
+        type: SECRET
+        value: "REEMPLAZAR_EN_DO"
+      - key: PORT
+        value: "4000"
+
+static_sites:
+  - name: frontend
+    github:
+      repo: AlvaroCornejo/EBC_CIERRE_DE_CAJA
+      branch: main
+      deploy_on_push: true
+    source_dir: frontend
+    build_command: npm install && npm run build
+    output_dir: dist
+    envs:
+      - key: VITE_API_URL
+        value: ${backend.PUBLIC_URL}/api
